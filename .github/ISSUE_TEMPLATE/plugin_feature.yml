@@ -9,7 +9,7 @@ body:
         「目的」「言語」「効果」について記載してください。
   - type: input
     id: plugin_name
-    attibutes: 
+    attributes: 
       label: 対象のPlugin
       placeholder: 例）rust-plugin
     validations: 
