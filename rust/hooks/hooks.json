@@ -1,0 +1,25 @@
+{
+    "hooks": {
+        "PostToolUse": [
+            {
+                "matcher": "Edit | Write",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hooks-tools.py"
+                    }
+                ]
+            }
+        ],
+        "Stop": [
+            {
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hooks-tools.py"
+                    }
+                ]
+            }
+        ]
+    }
+}
