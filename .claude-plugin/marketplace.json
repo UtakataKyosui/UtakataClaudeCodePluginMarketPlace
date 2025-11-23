@@ -13,6 +13,11 @@
       "name": "code-review-plugin",
       "source": "./code-review",
       "description": "Code Review Plugin"
+    },
+    {
+      "name": "rust-development-plugin",
+      "source": "./rust",
+      "description": "Rust Development Plugin"
     }
   ]
 }
