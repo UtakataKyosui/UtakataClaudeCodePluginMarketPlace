@@ -41,31 +41,13 @@ def run_command(cmd: List[str]) -> None:
 
 def ensure_rust_env() -> None:
     """
-    Ensure cargo exists; if not, try loading ~/.cargo/env.
-    Raise CargoToolError if loading fails.
+    Ensure cargo exists.
+    Raise CargoToolError if not found.
     """
-    if shutil.which("cargo") is not None:
-        return
-
-    cargo_env = os.path.expanduser("~/.cargo/env")
-
-    if os.path.isfile(cargo_env):
-        # Run 'source ~/.cargo/env' in a subshell
-        try:
-            subprocess.run(
-                f"source {cargo_env}",
-                shell=True,
-                executable="/bin/bash",
-                check=True,
-            )
-        except subprocess.CalledProcessError:
-            raise CargoToolError("Failed to load Rust environment from ~/.cargo/env")
-
-        if shutil.which("cargo") is not None:
-            return
-
-    raise CargoToolError("Cargo not found. Rust environment is not configured properly.")
-
+    if shutil.which("cargo") is None:
+        raise CargoToolError(
+            "Cargo not found. Rust environment is not configured properly."
+        )
 
 def cargo_check() -> None:
     print("🔍 Running cargo check...")

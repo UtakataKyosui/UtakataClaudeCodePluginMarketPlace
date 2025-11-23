@@ -5,7 +5,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "pip install --target ${CLAUDE_PLUGIN_ROOT}/scripts/requirements.txt"
+                        "command": "pip install -r ${CLAUDE_PLUGIN_ROOT}/scripts/requirements.txt"
                     },
                     {
                         "type": "command",
@@ -20,7 +20,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hooks-tools.py"
+                        "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hook-tools.py"
                     }
                 ]
             }
@@ -30,7 +30,7 @@
                 "hooks": [
                     {
                         "type": "command",
-                        "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hooks-tools.py"
+                        "command": "python3 ${CLAUDE_PLUGIN_ROOT}/scripts/hook-tools.py"
                     }
                 ]
             }
