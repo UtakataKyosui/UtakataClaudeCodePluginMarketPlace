@@ -4,7 +4,7 @@ use chrono::{DateTime, Utc};
 use claude_code_hooks::{HookEvent, PostToolUseEvent, PreToolUseEvent, helpers};
 use serde::{Deserialize, Serialize};
 
-use crate::{bash_command::BashCommand, info_session::InfoSession, rust_operation::RustOperation};
+use crate::models::{BashCommand, InfoSession, RustOperation};
 
 /// Global statistics and logging state
 #[derive(Debug, Default, Serialize, Deserialize)]

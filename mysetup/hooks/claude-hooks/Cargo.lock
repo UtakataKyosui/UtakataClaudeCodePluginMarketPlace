@@ -331,6 +331,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "integrated-claude-hooks"
+version = "0.2.0"
+dependencies = [
+ "anyhow",
+ "chrono",
+ "claude-code-hooks",
+ "dirs",
+ "mac-notification-sys",
+ "regex",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "io-uring"
 version = "0.7.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -556,21 +571,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "02b3e5e68a3a1a02aad3ec490a98007cbc13c37cbe84a3cd7b8e406d76e7f778"
 dependencies = [
  "unicode-ident",
-]
-
-[[package]]
-name = "production-hooks"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "chrono",
- "claude-code-hooks",
- "dirs",
- "mac-notification-sys",
- "regex",
- "serde",
- "serde_json",
- "tokio",
 ]
 
 [[package]]
