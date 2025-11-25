@@ -1,0 +1,48 @@
+{
+	"hooks": {
+		"UserPromptSubmit": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "$HOME/.claude/MyClaudeCodeHooks/target/release/MyClaudeCodeHooks",
+						"timeout": 30
+					}
+				]
+			}
+		],
+		"PreToolUse": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "$HOME/.claude/MyClaudeCodeHooks/target/release/MyClaudeCodeHooks",
+						"timeout": 30
+					}
+				]
+			}
+		],
+		"PostToolUse": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "$HOME/.claude/MyClaudeCodeHooks/target/release/MyClaudeCodeHooks",
+						"timeout": 30
+					}
+				]
+			}
+		],
+		"Stop": [
+			{
+				"hooks": [
+					{
+						"type": "command",
+						"command": "$HOME/.claude/MyClaudeCodeHooks/target/release/MyClaudeCodeHooks",
+						"timeout": 30
+					}
+				]
+			}
+		]
+  	}
+}
