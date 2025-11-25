@@ -1,0 +1,78 @@
+{
+	"mcpServers": {
+		"sequential-thinking": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"@modelcontextprotocol/server-sequential-thinking"
+			],
+			"env": {}
+		},
+		"context7": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"@upstash/context7-mcp"
+			],
+			"env": {}
+		},
+		"magic": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"@21st-dev/magic"
+			],
+			"env": {}
+		},
+		"openmemory": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"openmemory"
+			],
+			"env": {
+				"OPENMEMORY_API_KEY": "$OPENMEMORY_API_KEY",
+				"CLIENT_NAME": "openmemory"
+			}
+		},
+		"github": {
+			"type": "stdio",
+			"command": "npx",
+			"args": [
+				"-y",
+				"@modelcontextprotocol/server-github"
+			],
+			"env": {
+				"GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_PERSONAL_ACCESS_TOKEN"
+			}
+		},
+		"vibe_kanban": {
+			"command": "npx",
+			"args": [
+				"-y",
+				"vibe-kanban",
+				"--mcp"
+			]
+		},
+		"phantom": {
+			"type": "stdio",
+			"command": "phantom",
+			"args": [
+				"mcp",
+				"serve"
+			],
+			"env": {}
+		},
+		"docs-rs": {
+			"command": "npx",
+			"args": [
+				"@nuskey8/docs-rs-mcp@latest",
+				"-y"
+			]
+		}
+	}
+}
