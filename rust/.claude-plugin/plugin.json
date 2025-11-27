@@ -1,13 +1,22 @@
 {
   "name": "rust-development-plugin",
-  "description": "Rust Development Plugin",
   "version": "0.0.1",
+  "description": "Comprehensive Rust development toolkit with specialized agents for code review, debugging, and optimization, plus custom hooks for enhanced workflow automation",
   "author": {
     "name": "Utakata Kyosui",
     "email": "fill.ayaextech@gmail.com"
   },
   "repository": "https://github.com/UtakataKyosui/UtakataClaudePlugin.git",
-  "keywords": ["development","rust","agent-skill","hooks"],
-  "agents": "./agents/",
+  "keywords": [
+    "development",
+    "rust",
+    "agent-skill",
+    "hooks"
+  ],
+  "agents": [
+    "./agents/code-reviewer.md",
+    "./agents/code-debugger.md",
+    "./agents/code-optimizer.md"
+  ],
   "hooks": "./hooks/hooks.json"
 }

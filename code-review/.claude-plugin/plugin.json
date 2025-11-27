@@ -1,18 +1,22 @@
 {
   "name": "code-review-plugin",
-  "description": "Code Review Plugin",
   "version": "0.0.1",
+  "description": "Professional code review automation with principle-based and checklist-driven analysis through specialized commands and agents",
   "author": {
     "name": "Utakata Kyosui",
     "email": "fill.ayaextech@gmail.com"
   },
   "repository": "https://github.com/UtakataKyosui/UtakataClaudePlugin.git",
-  "keywords": ["development","code-review","commands"],
+  "keywords": [
+    "development",
+    "code-review",
+    "commands"
+  ],
   "commands": [
-	"./commands/principles.md",
-	"./commands/checklist.md"
+    "./commands/code-review/principle.md",
+    "./commands/code-review/checklist.md"
   ],
   "agents": [
-    "./agents/reviewer.md"
+    "./agents/code-reviewer.md"
   ]
 }
