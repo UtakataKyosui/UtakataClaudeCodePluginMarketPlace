@@ -1,0 +1,32 @@
+{
+	"hooks": {
+		"UserPromptSubmit": [
+			{
+				"type": "command",
+				"command": "${CLAUDE_PLUGIN_ROOT}/hooks/claude-hooks/target/release/integrated-claude-hooks",
+				"timeout": 30
+			}
+		],
+		"PreToolUse": [
+			{
+				"type": "command",
+				"command": "${CLAUDE_PLUGIN_ROOT}/hooks/claude-hooks/target/release/integrated-claude-hooks",
+				"timeout": 30
+			}
+		],
+		"PostToolUse": [
+			{
+				"type": "command",
+				"command": "${CLAUDE_PLUGIN_ROOT}/hooks/claude-hooks/target/release/integrated-claude-hooks",
+				"timeout": 30
+			}
+		],
+		"Stop": [
+			{
+				"type": "command",
+				"command": "${CLAUDE_PLUGIN_ROOT}/hooks/claude-hooks/target/release/integrated-claude-hooks",
+				"timeout": 30
+			}
+		]
+	}
+}
