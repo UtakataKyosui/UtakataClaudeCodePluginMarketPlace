@@ -22,11 +22,11 @@ AUTO_FORMAT=true
 AUTO_LINT=true
 
 if [ -f ".claude/rust.local.md" ]; then
-    # Parse YAML frontmatter
-    if grep -q "^auto_format: false" ".claude/rust.local.md"; then
+    # Parse YAML frontmatter with flexible spacing
+    if grep -qE "^auto_format:[[:space:]]*false" ".claude/rust.local.md"; then
         AUTO_FORMAT=false
     fi
-    if grep -q "^auto_lint: false" ".claude/rust.local.md"; then
+    if grep -qE "^auto_lint:[[:space:]]*false" ".claude/rust.local.md"; then
         AUTO_LINT=false
     fi
 fi
@@ -42,8 +42,9 @@ fi
 
 # Auto-lint if enabled
 if [ "$AUTO_LINT" = true ]; then
-    echo "Linting Rust code..."
-    if ! cargo clippy --quiet -- -D warnings 2>&1; then
+    echo "Linting Rust code for crate containing $FILE_PATH..."
+    # Run clippy in the context of the file's crate to ensure correct scope in workspaces
+    if ! (cd "$(dirname "$FILE_PATH")" && cargo clippy --quiet -- -D warnings 2>&1); then
         echo "! Clippy warnings/errors detected"
         echo "Run /rust:lint to see details and apply fixes"
         exit 1  # Block if errors found (per Phase 3 spec)

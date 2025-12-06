@@ -37,8 +37,7 @@ Comprehensive Rust development toolkit for Claude Code with linting, formatting,
 - **PreCompact** - Runs final validation checks before conversation ends
 
 ### 🔌 MCP Servers
-- **crates-io** - Search crates, get latest versions and documentation
-- **rustsec** - Check security advisories and vulnerabilities
+- **crates-io** - Search crates, get latest versions and documentation from crates.io, docs.rs, and lib.rs
 
 ## Installation
 
@@ -151,17 +150,15 @@ To disable hooks temporarily, adjust settings in `.claude/rust.local.md`.
 ## MCP Servers
 
 ### crates-io
-Provides access to crates.io API:
+Provides access to crates.io, docs.rs, and lib.rs via web fetch:
 - Search for crates by keyword
 - Get latest versions and metadata
 - Check download counts and popularity
-
-### rustsec
-Provides access to RustSec Advisory Database:
-- Check dependencies for known vulnerabilities
-- Get details on security advisories
+- Access documentation
 
 No authentication required, but rate limits apply. Add `crates_io_token` in settings for higher limits.
+
+**Note**: Security vulnerability checking is available through the `/rust:deps` command using `cargo-audit`.
 
 ## Troubleshooting
 
