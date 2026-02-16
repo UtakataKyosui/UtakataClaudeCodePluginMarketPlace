@@ -38,4 +38,4 @@ Protocol Buffers (protobuf) は、Google が開発した言語中立・プラッ
 *   [Language Guide (proto3)](https://protobuf.dev/programming-guides/proto3/): proto3 の構文ガイド。
 *   [Style Guide](https://protobuf.dev/programming-guides/style/): 公式スタイルガイド。
 *   [Buf Documentation](https://buf.build/docs/): Buf ツールのドキュメント。
-*   [Uber Protobuf Style Guide V2](https://github.com/uber/prototool/blob/master/style/README.md): Uber のスタイルガイド（参考）。
+*   [Buf Lint Rules](https://buf.build/docs/lint/rules/): Buf が提供するスタイル・lint ルールの一覧。

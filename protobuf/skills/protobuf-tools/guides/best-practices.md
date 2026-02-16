@@ -49,6 +49,6 @@ message Log {
 import "google/protobuf/empty.proto";
 
 service Health {
-  rpc Check(google.protobuf.Empty) returns (HealthCheckResponse);
+  rpc Check(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 ```
