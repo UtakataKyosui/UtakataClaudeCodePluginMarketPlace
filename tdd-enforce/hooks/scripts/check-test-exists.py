@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-PostToolUse hook: TDD 準拠チェック（Blocking）
+PreToolUse hook: TDD 準拠チェック（Blocking）
 
-Edit/Write ツール使用後に実行され、実装コードに対応するテストが
+Edit/Write ツール使用前に実行され、実装コードに対応するテストが
 存在するかをチェックする。テストがない場合はブロックする。
 
 - 実装コードの変更時のみチェック（テストファイル・設定ファイルはスキップ）
@@ -21,7 +21,7 @@ def read_input():
     try:
         data = json.loads(sys.stdin.read())
         return data
-    except (json.JSONDecodeError, EOFError):
+    except (json.JSONDecodeError, EOFError, OSError, UnicodeDecodeError):
         return None
 
 
@@ -134,7 +134,8 @@ def is_test_file(file_path):
         return True
 
     # __tests__ ディレクトリ内
-    if "/__tests__/" in file_path or "/tests/" in file_path:
+    path_parts = file_path.replace("\\", "/").split("/")
+    if "__tests__" in path_parts or "tests" in path_parts:
         return True
 
     return False
@@ -169,9 +170,8 @@ def find_test_file(file_path):
             os.path.join(dirname, "__tests__", f"{name_without_ext}{ext}"),
             os.path.join(dirname, "__tests__", f"{name_without_ext}.test{ext}"),
         ]
-        # .tsx → .test.tsx, .ts → .test.ts のクロスチェック
+        # .tsx → .test.ts, .ts → .test.tsx のクロスチェック
         if ext == ".tsx":
-            test_patterns.append(os.path.join(dirname, f"{name_without_ext}.test.tsx"))
             test_patterns.append(os.path.join(dirname, f"{name_without_ext}.test.ts"))
         elif ext == ".ts":
             test_patterns.append(os.path.join(dirname, f"{name_without_ext}.test.tsx"))
@@ -215,6 +215,7 @@ def check_rust_inline_test(file_path):
     """Rust ファイル内にインラインテストがあるかチェック"""
     if not os.path.isfile(file_path):
         return True  # ファイルが存在しない/通常ファイルでない場合はスキップ
+    name_without_ext = os.path.splitext(os.path.basename(file_path))[0]
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
@@ -226,9 +227,9 @@ def check_rust_inline_test(file_path):
         if project_root:
             tests_dir = os.path.join(project_root, "tests")
             if os.path.isdir(tests_dir):
-                # tests/ にファイルがあればOK（簡易チェック）
+                # tests/ にソースファイルに対応するファイルがあるかチェック
                 for f in os.listdir(tests_dir):
-                    if f.endswith(".rs"):
+                    if f.endswith(".rs") and name_without_ext in os.path.splitext(f)[0]:
                         return True
         return False
     except OSError:
