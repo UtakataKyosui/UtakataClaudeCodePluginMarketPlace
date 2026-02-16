@@ -13,6 +13,7 @@ UserPromptSubmit hook: セッションID自動保存
 import json
 import os
 import sys
+import time
 from datetime import datetime, timezone
 
 MAX_HISTORY = 100
@@ -39,21 +40,45 @@ def load_sessions(file_path):
     return {"sessions": []}
 
 
-def save_sessions(file_path, data):
-    """セッションファイルを書き出す（ロックファイルによる排他制御付き）"""
+def update_sessions_with_lock(file_path, session_id, cwd):
+    """ロック取得→ロード→更新→書き込みをアトミックに実行。(saved, is_new_file) を返す"""
     lock_path = file_path + ".lock"
+    # スタールロック検出 (5分以上古いロックは削除)
+    if os.path.exists(lock_path):
+        try:
+            if time.time() - os.path.getmtime(lock_path) > 300:
+                os.remove(lock_path)
+        except OSError:
+            pass
     try:
         lock_fd = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-        try:
-            with open(file_path, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
-                f.write("\n")
-        finally:
-            os.close(lock_fd)
-            os.remove(lock_path)
     except FileExistsError:
-        # 別プロセスが書き込み中のためスキップ
-        pass
+        return False, False
+    is_new_file = not os.path.exists(file_path)
+    try:
+        sessions_data = load_sessions(file_path)
+        sessions = sessions_data["sessions"]
+        if sessions and sessions[-1].get("session_id") == session_id:
+            return False, False
+        entry = {
+            "session_id": session_id,
+            "started_at": datetime.now(timezone.utc).astimezone().isoformat(),
+            "project_path": cwd,
+        }
+        sessions.append(entry)
+        if len(sessions) > MAX_HISTORY:
+            sessions = sessions[-MAX_HISTORY:]
+            sessions_data["sessions"] = sessions
+        with open(file_path, "w", encoding="utf-8") as f:
+            json.dump(sessions_data, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+        return True, is_new_file
+    finally:
+        os.close(lock_fd)
+        try:
+            os.remove(lock_path)
+        except OSError:
+            pass
 
 
 def main():
@@ -69,32 +94,11 @@ def main():
             sys.exit(0)
 
         file_path = os.path.join(cwd, SESSIONS_FILE)
-        is_new_file = not os.path.exists(file_path)
 
-        sessions_data = load_sessions(file_path)
-        sessions = sessions_data["sessions"]
-
-        # 最新エントリと同じ session_id なら重複スキップ
-        if sessions and sessions[-1].get("session_id") == session_id:
-            sys.exit(0)
-
-        # 新エントリを追加
-        entry = {
-            "session_id": session_id,
-            "started_at": datetime.now(timezone.utc).astimezone().isoformat(),
-            "project_path": cwd,
-        }
-        sessions.append(entry)
-
-        # 履歴上限でトリム
-        if len(sessions) > MAX_HISTORY:
-            sessions = sessions[-MAX_HISTORY:]
-            sessions_data["sessions"] = sessions
-
-        save_sessions(file_path, sessions_data)
+        saved, is_new_file = update_sessions_with_lock(file_path, session_id, cwd)
 
         # 初回作成時は .gitignore への追加を案内
-        if is_new_file:
+        if saved and is_new_file:
             print(
                 f"[session-saver] {SESSIONS_FILE} を作成しました。"
                 f" .gitignore への追加を推奨します: echo '{SESSIONS_FILE}' >> .gitignore",
