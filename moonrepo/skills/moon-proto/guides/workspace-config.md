@@ -41,6 +41,8 @@ Moon is designed to optimize CI/CD pipelines.
 
 ```yaml
 # Example GitHub Action step
+# セキュリティ: 本番環境ではタグではなくコミット SHA に固定することを推奨
+# 例: moonrepo/setup-toolchain@<commit-sha>
 - uses: moonrepo/setup-toolchain@v0
   with:
     auto-install: true

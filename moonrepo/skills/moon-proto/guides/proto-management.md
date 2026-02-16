@@ -30,4 +30,4 @@ go = "1.22.0"
 
 ## Moonrepo Integration
 
-Moonrepo leverages `proto` to manage its internal toolchain. When `toolchain.js` (or similar) is configured, Moon will automatically use the versions specified in `.prototools`.
+Moonrepo leverages `proto` to manage its internal toolchain. When `.moon/toolchain.yml` is configured, Moon will automatically use the versions specified in `.prototools`.
