@@ -213,6 +213,8 @@ def find_test_file(file_path):
 
 def check_rust_inline_test(file_path):
     """Rust ファイル内にインラインテストがあるかチェック"""
+    if not os.path.isfile(file_path):
+        return True  # ファイルが存在しない/通常ファイルでない場合はスキップ
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
