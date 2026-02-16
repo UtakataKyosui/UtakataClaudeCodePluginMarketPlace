@@ -9,7 +9,9 @@ TARGET_DIR="$REPO_ROOT/.jj/repo"
 TARGET="$TARGET_DIR/config.toml"
 
 if [ ! -d "$TARGET_DIR" ]; then
-    echo "Error: $TARGET_DIR が見つかりません。jj リポジトリのルートから実行してください。"
+    echo "Error: $TARGET_DIR が見つかりません。"
+    echo "  - jj リポジトリのルートから実行していることを確認してください。"
+    echo "  - まだ .jj が初期化されていない場合は、先に 'jj init' または 'jj git clone' を実行してください。"
     exit 1
 fi
 

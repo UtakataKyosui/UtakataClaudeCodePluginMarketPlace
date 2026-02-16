@@ -111,6 +111,16 @@ PATTERNS = [
 ]
 
 
+def is_safe_file_path(file_path: str) -> bool:
+    """ファイルパスがプロジェクトディレクトリ内に限定されているか検証する（パストラバーサル対策）"""
+    try:
+        project_root = os.path.realpath(os.getcwd())
+        resolved = os.path.realpath(file_path)
+        return resolved.startswith(project_root + os.sep) or resolved == project_root
+    except (OSError, ValueError):
+        return False
+
+
 def detect_patterns(file_path):
     """ファイル内容からパターンを検出する"""
     if os.path.getsize(file_path) > MAX_FILE_SIZE:
@@ -142,6 +152,10 @@ def main():
 
     # 除外ファイルはスキップ
     if is_excluded_file(file_path):
+        sys.exit(0)
+
+    # プロジェクトディレクトリ外へのアクセスを拒否（パストラバーサル対策）
+    if not is_safe_file_path(file_path):
         sys.exit(0)
 
     # パターン検出
