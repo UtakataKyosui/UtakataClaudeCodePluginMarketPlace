@@ -229,7 +229,7 @@ def check_rust_inline_test(file_path):
             if os.path.isdir(tests_dir):
                 # tests/ にソースファイルに対応するファイルがあるかチェック
                 for f in os.listdir(tests_dir):
-                    if f.endswith(".rs") and name_without_ext in os.path.splitext(f)[0]:
+                    if f.endswith(".rs") and os.path.splitext(f)[0] == name_without_ext:
                         return True
         return False
     except OSError:

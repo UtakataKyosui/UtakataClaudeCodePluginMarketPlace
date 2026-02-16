@@ -81,7 +81,7 @@ model: inherit
 
 以下のテストスケルトンを追加:
 
-\```rust
+```rust
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -91,7 +91,7 @@ mod tests {
         // TODO: テストを実装
     }
 }
-\```
+```
 ```
 
 ## 重要な注意事項
