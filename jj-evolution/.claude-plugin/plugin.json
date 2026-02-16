@@ -1,0 +1,19 @@
+{
+    "name": "jj-evolution",
+    "description": "Jujutsu (jj) Evolution - Parallel Development and History Rewriting Skills. 並列開発と履歴操作のための高度なガイド。",
+    "version": "1.1.0",
+    "author": {
+        "name": "UtakataKyosui"
+    },
+    "keywords": [
+        "jj",
+        "jujutsu",
+        "vcs",
+        "parallel-development",
+        "history-rewriting",
+        "pr-review"
+    ],
+    "agents": "./.agents/skills/",
+    "license": "MIT",
+    "repository": "https://github.com/UtakataKyosui/C2Lab"
+}
