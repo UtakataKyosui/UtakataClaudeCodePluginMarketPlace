@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 
 MAX_HISTORY = 100
 SESSIONS_FILE = ".claude-sessions.json"
+LOCK_TIMEOUT = 300  # スタールロックと見なす秒数（5分）
 
 
 def read_input():
@@ -43,10 +44,10 @@ def load_sessions(file_path):
 def update_sessions_with_lock(file_path, session_id, cwd):
     """ロック取得→ロード→更新→書き込みをアトミックに実行。(saved, is_new_file) を返す"""
     lock_path = file_path + ".lock"
-    # スタールロック検出 (5分以上古いロックは削除)
+    # スタールロック検出 (LOCK_TIMEOUT 秒以上古いロックは削除)
     if os.path.exists(lock_path):
         try:
-            if time.time() - os.path.getmtime(lock_path) > 300:
+            if time.time() - os.path.getmtime(lock_path) > LOCK_TIMEOUT:
                 os.remove(lock_path)
         except OSError:
             pass
@@ -54,8 +55,9 @@ def update_sessions_with_lock(file_path, session_id, cwd):
         lock_fd = os.open(lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
     except FileExistsError:
         return False, False
-    is_new_file = not os.path.exists(file_path)
     try:
+        # ロック取得後に is_new_file を判定（TOCTOU防止）
+        is_new_file = not os.path.exists(file_path)
         sessions_data = load_sessions(file_path)
         sessions = sessions_data["sessions"]
         if sessions and sessions[-1].get("session_id") == session_id:
@@ -69,7 +71,9 @@ def update_sessions_with_lock(file_path, session_id, cwd):
         if len(sessions) > MAX_HISTORY:
             sessions = sessions[-MAX_HISTORY:]
             sessions_data["sessions"] = sessions
-        with open(file_path, "w", encoding="utf-8") as f:
+        # O_NOFOLLOW でシンボリックリンク経由の書き込みを防止、0o600 で権限制限
+        fd = os.open(file_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
             json.dump(sessions_data, f, indent=2, ensure_ascii=False)
             f.write("\n")
         return True, is_new_file
