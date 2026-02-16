@@ -49,8 +49,8 @@ def get_component_dir(file_path):
 
 
 def check_barrel_exists(component_dir):
-    """index.ts / index.tsx が存在するかチェック"""
-    for ext in ["index.ts", "index.tsx"]:
+    """index.ts / index.tsx / index.js / index.jsx が存在するかチェック"""
+    for ext in ["index.ts", "index.tsx", "index.js", "index.jsx"]:
         if os.path.exists(os.path.join(component_dir, ext)):
             return True
     return False
@@ -70,8 +70,8 @@ def check_naming_convention(component_dir, file_path):
                     f"ディレクトリ名 '{dir_name}' が PascalCase ではありません"
                 )
 
-    # index.ts 以外のファイルがディレクトリ名を接頭辞に持つかチェック
-    if file_name != "index.ts" and file_name != "index.tsx":
+    # index ファイル以外がディレクトリ名を接頭辞に持つかチェック
+    if file_name not in ("index.ts", "index.tsx", "index.js", "index.jsx"):
         base_name = file_name.split('.', 1)[0]
         # use* プレフィックスのフックファイルは除外
         if not base_name.startswith("use"):
