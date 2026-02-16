@@ -27,8 +27,16 @@ COMPONENT_DIR_NAMES = (
 
 # barrel チェックを省略するディレクトリ名
 IGNORED_BARREL_CHECK_DIRS = {
-    "components", "features", "hooks", "utils", "types",
-    "constants", "scripts", "styles", "pages", "app",
+    "components",
+    "features",
+    "hooks",
+    "utils",
+    "types",
+    "constants",
+    "scripts",
+    "styles",
+    "pages",
+    "app",
 }
 
 # PascalCase チェックを省略するディレクトリ名
@@ -80,25 +88,28 @@ def check_naming_convention(component_dir, file_path):
     file_name = os.path.basename(file_path)
 
     # コンポーネントディレクトリがPascalCaseかチェック
-    if f"{os.sep}components{os.sep}" in component_dir:
-        if not re.match(r"^[A-Z][a-zA-Z0-9]*$", dir_name):
-            if dir_name not in IGNORED_PASCALCASE_DIRS:
-                warnings.append(
-                    f"ディレクトリ名 '{dir_name}' が PascalCase ではありません"
-                )
+    if (
+        f"{os.sep}components{os.sep}" in component_dir
+        and not re.match(r"^[A-Z][a-zA-Z0-9]*$", dir_name)
+        and dir_name not in IGNORED_PASCALCASE_DIRS
+    ):
+        warnings.append(f"ディレクトリ名 '{dir_name}' が PascalCase ではありません")
 
     # index ファイル以外がディレクトリ名を接頭辞に持つかチェック
     if file_name not in ("index.ts", "index.tsx", "index.js", "index.jsx"):
-        base_name = file_name.split('.', 1)[0]
+        base_name = file_name.split(".", 1)[0]
         # use* プレフィックスのフックファイルは除外
-        if not base_name.startswith("use"):
-            if base_name != dir_name and f"{os.sep}components{os.sep}" in component_dir:
-                # サブディレクトリ内のファイルは除外
-                parent_of_dir = os.path.basename(os.path.dirname(component_dir))
-                if parent_of_dir == "components":
-                    warnings.append(
-                        f"ファイル名 '{file_name}' がディレクトリ名 '{dir_name}' と一致しません"
-                    )
+        if (
+            not base_name.startswith("use")
+            and base_name != dir_name
+            and f"{os.sep}components{os.sep}" in component_dir
+        ):
+            # サブディレクトリ内のファイルは除外
+            parent_of_dir = os.path.basename(os.path.dirname(component_dir))
+            if parent_of_dir == "components":
+                warnings.append(
+                    f"ファイル名 '{file_name}' がディレクトリ名 '{dir_name}' と一致しません"
+                )
 
     return warnings
 

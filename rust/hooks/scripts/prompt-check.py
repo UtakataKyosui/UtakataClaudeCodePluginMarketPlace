@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import json
 import sys
+
 import mistune
+
 
 # ---------------------------------------
 # Markdown 判定関数（mistune で AST を生成 → エラーが出なければ Markdown とみなす）
@@ -22,10 +24,14 @@ def is_markdown(text: str) -> bool:
 try:
     input_data = json.load(sys.stdin)
 except json.JSONDecodeError as e:
-    print(json.dumps({
-        "decision": "block",
-        "reason": f"入力がJSONとして読み取れませんでした: {e}"
-    }))
+    print(
+        json.dumps(
+            {
+                "decision": "block",
+                "reason": f"入力がJSONとして読み取れませんでした: {e}",
+            }
+        )
+    )
     sys.exit(0)
 
 prompt = input_data.get("prompt", "")
@@ -37,7 +43,7 @@ if not is_markdown(prompt):
     # Markdown ではない → block
     output = {
         "decision": "block",
-        "reason": "入力がMarkdown形式ではありませんでした。Markdownで記述してください。"
+        "reason": "入力がMarkdown形式ではありませんでした。Markdownで記述してください。",
     }
     print(json.dumps(output, ensure_ascii=False))
     sys.exit(0)
@@ -49,7 +55,7 @@ if not is_markdown(prompt):
 output = {
     "hookSpecificOutput": {
         "hookEventName": "UserPromptSubmit",
-        "additionalContext": "Markdown 形式を確認しました。続行します。"
+        "additionalContext": "Markdown 形式を確認しました。続行します。",
     }
 }
 

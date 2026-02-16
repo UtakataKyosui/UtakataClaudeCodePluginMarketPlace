@@ -10,11 +10,12 @@ UserPromptSubmit hook: セッションID自動保存
 - 外部依存なし（stdlib のみ）
 """
 
+import contextlib
 import json
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 MAX_HISTORY = 100
 SESSIONS_FILE = ".claude-sessions.json"
@@ -32,11 +33,11 @@ def read_input():
 def load_sessions(file_path):
     """セッションファイルを読み込む。なければ空の構造を返す"""
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             data = json.load(f)
             if isinstance(data, dict) and "sessions" in data:
                 return data
-    except (FileNotFoundError, json.JSONDecodeError, IOError):
+    except (json.JSONDecodeError, OSError):
         pass
     return {"sessions": []}
 
@@ -64,7 +65,7 @@ def update_sessions_with_lock(file_path, session_id, cwd):
             return False, False
         entry = {
             "session_id": session_id,
-            "started_at": datetime.now(timezone.utc).astimezone().isoformat(),
+            "started_at": datetime.now(UTC).astimezone().isoformat(),
             "project_path": cwd,
         }
         sessions.append(entry)
@@ -72,17 +73,16 @@ def update_sessions_with_lock(file_path, session_id, cwd):
             sessions = sessions[-MAX_HISTORY:]
             sessions_data["sessions"] = sessions
         # O_NOFOLLOW でシンボリックリンク経由の書き込みを防止、0o600 で権限制限
-        fd = os.open(file_path, os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW, 0o600)
+        flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | os.O_NOFOLLOW
+        fd = os.open(file_path, flags, 0o600)
         with os.fdopen(fd, "w", encoding="utf-8") as f:
             json.dump(sessions_data, f, indent=2, ensure_ascii=False)
             f.write("\n")
         return True, is_new_file
     finally:
         os.close(lock_fd)
-        try:
+        with contextlib.suppress(OSError):
             os.remove(lock_path)
-        except OSError:
-            pass
 
 
 def main():
@@ -103,9 +103,10 @@ def main():
 
         # 初回作成時は .gitignore への追加を案内
         if saved and is_new_file:
+            gitignore_hint = f"echo '{SESSIONS_FILE}' >> .gitignore"
             print(
                 f"[session-saver] {SESSIONS_FILE} を作成しました。"
-                f" .gitignore への追加を推奨します: echo '{SESSIONS_FILE}' >> .gitignore",
+                f" .gitignore への追加を推奨します: {gitignore_hint}",
                 file=sys.stderr,
             )
 

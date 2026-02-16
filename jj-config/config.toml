@@ -1,0 +1,11 @@
+#:schema https://docs.jj-vcs.dev/latest/config-schema.json
+
+[revset-aliases]
+"trunk()" = "main@origin"
+
+# ruff check --fix + format を1パイプで実行（scripts/jj-ruff.sh 参照）
+# Docker / uvx / ruff を自動検出。--exit-zero により jj fix が常にファイルを更新できる
+[fix.tools.ruff]
+command = ["$root/scripts/jj-ruff.sh", "$path"]
+enabled = true
+patterns = ["glob:**/*.py"]
