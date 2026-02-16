@@ -96,13 +96,13 @@ PATTERNS = [
     },
     {
         "name": "手動文字列距離関数",
-        "regex": r"""function\s+(?:levenshtein|editDistance|hammingDistance|jaroWinkler|damerauLevenshtein)""",
+        "regex": r"""(?:function\s+|(?:const|let|var)\s+)(?:levenshtein|editDistance|hammingDistance|jaroWinkler|damerauLevenshtein)\s*[=(]""",
         "suggestion": "wasm-pack カスタム Rust ビルド",
         "detail": "文字列距離計算は Rust/WASM で 10-50x 高速化可能",
     },
     {
         "name": "3重ネストループ (行列演算候補)",
-        "regex": r"""for\s*\(.*?\)\s*\{.*?for\s*\(.*?\)\s*\{.*?for\s*\(.*?\)""",
+        "regex": r"""for\s*\([^)]{0,200}\)\s*\{[^}]{0,500}for\s*\([^)]{0,200}\)\s*\{[^}]{0,500}for\s*\([^)]{0,200}\)""",
         "suggestion": "@stdlib/stdlib WASM または wasm-pack Rust ビルド",
         "detail": "行列演算パターンは WASM で 5-20x 高速化可能",
     },
@@ -127,7 +127,7 @@ def detect_patterns(file_path):
 
     detected = []
     for pattern in PATTERNS:
-        if re.search(pattern["regex"], content, re.DOTALL | re.MULTILINE):
+        if re.search(pattern["regex"], content, re.DOTALL):
             detected.append(pattern)
 
     return detected

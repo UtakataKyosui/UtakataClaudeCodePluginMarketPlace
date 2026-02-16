@@ -31,7 +31,7 @@ color: green
 
 #### 中優先度パターン (Medium)
 
-- 2重ネストループ内のデータ処理
+- 3重以上のネストループ（Python スクリプトが検出）
 - ループ内 `JSON.parse` / `JSON.stringify`
 - 手動実装の距離関数 (`levenshtein`, `editDistance`, `hamming`)
 - `DOMParser` を使った XML パース
