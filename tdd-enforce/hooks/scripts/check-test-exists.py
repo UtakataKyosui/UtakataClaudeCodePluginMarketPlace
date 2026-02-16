@@ -231,7 +231,7 @@ def check_rust_inline_test(file_path):
                     if f.endswith(".rs"):
                         return True
         return False
-    except (IOError, UnicodeDecodeError):
+    except OSError:
         return True  # 読めない場合はパス
 
 
