@@ -61,11 +61,7 @@ def is_excluded_file(file_path):
 
     # node_modules, dist 等
     excluded_dirs = ("node_modules", "dist", "build", ".next", ".nuxt")
-    for d in excluded_dirs:
-        if f"/{d}/" in file_path:
-            return True
-
-    return False
+    return any(f"/{d}/" in file_path for d in excluded_dirs)
 
 
 # 検出パターン定義
@@ -120,9 +116,9 @@ def detect_patterns(file_path):
     if os.path.getsize(file_path) > MAX_FILE_SIZE:
         return []
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
-    except (IOError, UnicodeDecodeError):
+    except (OSError, UnicodeDecodeError):
         return []
 
     detected = []

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
+import argparse
 import shutil
 import subprocess
 import sys
-import argparse
-from typing import List
 
 
 class CargoToolError(Exception):
     """Custom exception for cargo tool failures."""
+
     pass
 
 
-def run_command(cmd: List[str]) -> None:
+def run_command(cmd: list[str]) -> None:
     """
     Run a command with full error handling.
     If the command fails or is missing, raise CargoToolError.
@@ -23,17 +23,17 @@ def run_command(cmd: List[str]) -> None:
             text=True,
             check=True,
         )
-    except FileNotFoundError:
-        raise CargoToolError(f"Command not found: {cmd[0]}")
+    except FileNotFoundError as e:
+        raise CargoToolError(f"Command not found: {cmd[0]}") from e
     except subprocess.CalledProcessError as e:
         raise CargoToolError(
-            f"Command failed: {' '.join(cmd)}\n" +
-            f"Exit code: {e.returncode}\n\n" +
-            f"stdout:\n{e.stdout}\n" +
-            f"stderr:\n{e.stderr}"
-        )
+            f"Command failed: {' '.join(cmd)}\n"
+            + f"Exit code: {e.returncode}\n\n"
+            + f"stdout:\n{e.stdout}\n"
+            + f"stderr:\n{e.stderr}"
+        ) from e
     except OSError as e:
-        raise CargoToolError(f"OS error while executing {cmd}: {e}")
+        raise CargoToolError(f"OS error while executing {cmd}: {e}") from e
 
 
 def ensure_rust_env() -> None:
@@ -45,6 +45,7 @@ def ensure_rust_env() -> None:
         raise CargoToolError(
             "Cargo not found. Rust environment is not configured properly."
         )
+
 
 def cargo_check() -> None:
     print("🔍 Running cargo check...")
@@ -63,7 +64,7 @@ def cargo_fmt() -> None:
     try:
         run_command(["cargo", "fmt", "--check", "--quiet"])
         print("✅ Code formatting is correct")
-    except CargoToolError as e:
+    except CargoToolError:
         print("❌ Code formatting issues found")
         print("💡 Run 'cargo fmt' to fix formatting")
         raise

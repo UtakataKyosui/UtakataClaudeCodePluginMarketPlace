@@ -38,7 +38,6 @@ def extract_file_path(data):
 def is_excluded_file(file_path):
     """テスト不要なファイルかどうか判定する"""
     basename = os.path.basename(file_path)
-    dirname = os.path.dirname(file_path)
 
     # 設定ファイル
     config_patterns = [
@@ -100,15 +99,24 @@ def is_excluded_file(file_path):
 
     # CSS / HTML / 画像等
     non_code_ext = (
-        ".css", ".scss", ".sass", ".less",
-        ".html", ".htm", ".svg",
-        ".png", ".jpg", ".jpeg", ".gif", ".ico",
-        ".woff", ".woff2", ".ttf", ".eot",
+        ".css",
+        ".scss",
+        ".sass",
+        ".less",
+        ".html",
+        ".htm",
+        ".svg",
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".ico",
+        ".woff",
+        ".woff2",
+        ".ttf",
+        ".eot",
     )
-    if any(basename.endswith(ext) for ext in non_code_ext):
-        return True
-
-    return False
+    return any(basename.endswith(ext) for ext in non_code_ext)
 
 
 def is_test_file(file_path):
@@ -135,18 +143,25 @@ def is_test_file(file_path):
 
     # __tests__ ディレクトリ内
     path_parts = file_path.replace("\\", "/").split("/")
-    if "__tests__" in path_parts or "tests" in path_parts:
-        return True
-
-    return False
+    return "__tests__" in path_parts or "tests" in path_parts
 
 
 def is_source_code(file_path):
     """ソースコードファイルかどうか判定する"""
     code_extensions = (
-        ".rs", ".ts", ".tsx", ".js", ".jsx",
-        ".py", ".go", ".java", ".cs",
-        ".rb", ".ex", ".exs", ".swift",
+        ".rs",
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx",
+        ".py",
+        ".go",
+        ".java",
+        ".cs",
+        ".rb",
+        ".ex",
+        ".exs",
+        ".swift",
     )
     return any(file_path.endswith(ext) for ext in code_extensions)
 
@@ -202,10 +217,12 @@ def find_test_file(file_path):
         if "/src/main/" in file_path:
             test_dir = file_path.replace("/src/main/", "/src/test/")
             test_dir = os.path.dirname(test_dir)
-            test_patterns.extend([
-                os.path.join(test_dir, f"{name_without_ext}Test.java"),
-                os.path.join(test_dir, f"{name_without_ext}Tests.java"),
-            ])
+            test_patterns.extend(
+                [
+                    os.path.join(test_dir, f"{name_without_ext}Test.java"),
+                    os.path.join(test_dir, f"{name_without_ext}Tests.java"),
+                ]
+            )
         return any(os.path.exists(p) for p in test_patterns)
 
     return True  # 未対応言語はパス
@@ -217,7 +234,7 @@ def check_rust_inline_test(file_path):
         return True  # ファイルが存在しない/通常ファイルでない場合はスキップ
     name_without_ext = os.path.splitext(os.path.basename(file_path))[0]
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
         # #[cfg(test)] または #[test] の存在チェック
         if "#[cfg(test)]" in content or "#[test]" in content:
