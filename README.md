@@ -1,6 +1,6 @@
-# UtakataClaudeCodePluginMarketPlace
+# C2Lab
 
-UtakataのClaudeCodeのPlugin MarketPlaceです。
+Claude Code（C2）の実験場（Lab）です。
 Claude Codeでいちいち
 
 - Hook
@@ -8,4 +8,4 @@ Claude Codeでいちいち
 - SubAgent
 - Skill
 
-を用意するのは面倒くさかったので、MarketPlaceリポジトリを作成しました
+を用意するのは面倒くさかったので、プラグインリポジトリを作成しました
