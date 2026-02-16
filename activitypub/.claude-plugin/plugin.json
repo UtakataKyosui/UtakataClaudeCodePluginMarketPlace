@@ -16,7 +16,11 @@
         "json-ld"
     ],
     "license": "MIT",
-    "commands": [],
+    "commands": [
+        "./skills/activitypub-c2s/guides/concepts.md",
+        "./skills/activitypub-c2s/guides/messaging.md",
+        "./skills/activitypub-c2s/guides/activities.md"
+    ],
     "agents": [],
     "hooks": ""
 }
