@@ -34,11 +34,11 @@ def extract_file_path(data):
 
 def is_in_component_dir(file_path):
     """ファイルがコンポーネントディレクトリ内にあるかチェック"""
-    component_dirs = [
-        "/components/",
-        "/features/",
-        "/hooks/",
-    ]
+    excluded_dirs = ("node_modules", "dist", "build", ".next", ".nuxt")
+    for d in excluded_dirs:
+        if f"/{d}/" in file_path or file_path.startswith(f"{d}/"):
+            return False
+    component_dirs = ["/components/", "/features/", "/hooks/"]
     return any(d in file_path for d in component_dirs)
 
 
@@ -117,7 +117,7 @@ def main():
             "app",
         ):
             warnings.append(
-                f"[colocation] {component_dir} に index.ts がありません（barrel file）"
+                f"[colocation] {component_dir} に barrel file (index.ts/tsx/js/jsx) がありません"
             )
 
     # 命名規則チェック

@@ -55,7 +55,7 @@ src/pages/
 
 | ファイル | 命名規則 | 説明 |
 |---|---|---|
-| バレルファイル | `index.ts` | 常に `index.ts`。`index.tsx` は使わない |
+| バレルファイル | `index.ts` | TypeScriptプロジェクトでは `index.ts` を推奨。JSXを含む場合は `index.tsx`、JavaScriptプロジェクトでは `index.js`/`index.jsx` も可 |
 | フック | `use{Name}.ts` | React hooks 命名規則に従う |
 | コンテキスト | `{Name}Context.tsx` | `{Name}Provider` もここに含む |
 | HOC | `with{Name}.tsx` | Higher-Order Component |

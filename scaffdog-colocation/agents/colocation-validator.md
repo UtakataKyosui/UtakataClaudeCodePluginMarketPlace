@@ -26,7 +26,7 @@ model: inherit
 各ディレクトリについて以下のルールを検証する:
 
 #### barrel-missing (error)
-- コンポーネントディレクトリに `index.ts` または `index.tsx` が存在するか
+- コンポーネントディレクトリに `index.ts`、`index.tsx`、`index.js`、または `index.jsx` が存在するか
 - フィーチャーディレクトリのルートに `index.ts` が存在するか
 
 #### naming-mismatch (warning)
