@@ -1,0 +1,23 @@
+{
+  "name": "wasm-optimizer",
+  "description": "JS/TSコードの重い処理パターンを検出し、WebAssemblyベースのライブラリへの置き換えを提案するプラグイン。画像処理、暗号化、大量データ操作などのパターンを静的解析で検出する。",
+  "version": "1.0.0",
+  "author": {
+    "name": "UtakataKyosui",
+    "email": "fill.ayaextech@gmail.com"
+  },
+  "repository": "https://github.com/UtakataKyosui/C2Lab",
+  "keywords": ["wasm", "webassembly", "optimization", "performance", "js", "typescript"],
+  "license": "MIT",
+  "commands": [
+    "./commands/wasm-optimizer/init.md",
+    "./commands/wasm-optimizer/scan.md",
+    "./commands/wasm-optimizer/suggest.md",
+    "./commands/wasm-optimizer/integrate.md"
+  ],
+  "agents": [
+    "./agents/wasm-pattern-detector.md",
+    "./agents/wasm-audit-reporter.md"
+  ],
+  "hooks": "./hooks/hooks.json"
+}
