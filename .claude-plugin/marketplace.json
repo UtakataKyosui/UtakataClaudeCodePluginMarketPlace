@@ -91,6 +91,39 @@
       },
       "keywords": ["session", "resume", "history", "workflow"],
       "category": "workflow"
+    },
+    {
+      "name": "activitypub-c2s",
+      "source": "./activitypub",
+      "description": "ActivityPub Client-to-Server (C2S) インタラクションの実装支援プラグイン。JSON-LD Context、Activity Types、Inbox/Outboxの挙動に関するガイドを提供する。",
+      "version": "1.0.0",
+      "author": {
+        "name": "UtakataKyosui"
+      },
+      "keywords": ["activitypub", "federation", "c2s", "activitystreams", "social-web", "json-ld"],
+      "category": "development"
+    },
+    {
+      "name": "protobuf-tools",
+      "source": "./protobuf",
+      "description": "Protocol Buffers (protobuf) の使用支援プラグイン。`.proto`ファイルの書き方、スタイルガイド、protoc/bufコマンドの使用例を提供する。",
+      "version": "1.0.0",
+      "author": {
+        "name": "UtakataKyosui"
+      },
+      "keywords": ["protobuf", "protocol-buffers", "grpc", "serialization", "interface-definition", "schema"],
+      "category": "development"
+    },
+    {
+      "name": "moon-proto",
+      "source": "./moonrepo",
+      "description": "Moonrepo (Task Runner) と proto (Toolchain Manager) の統合利用支援プラグイン。環境構築、タスク管理、ワークスペース設定のガイドを提供する。",
+      "version": "1.0.0",
+      "author": {
+        "name": "UtakataKyosui"
+      },
+      "keywords": ["moonrepo", "proto", "monorepo", "task-runner", "toolchain", "build-system"],
+      "category": "development"
     }
   ]
 }
