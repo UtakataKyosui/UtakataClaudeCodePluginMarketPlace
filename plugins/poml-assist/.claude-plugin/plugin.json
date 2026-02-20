@@ -1,0 +1,13 @@
+{
+  "name": "poml-assist",
+  "description": "Microsoft POML（Prompt Orchestration Markup Language）を活用したプロンプト設計支援プラグイン。対話フローによるPOML生成、構文リファレンス、ファイル保存時の自動バリデーション・レンダリングプレビューを提供する。",
+  "version": "1.0.0",
+  "author": {
+    "name": "UtakataKyosui"
+  },
+  "keywords": ["poml", "prompt-engineering", "llm", "markup", "microsoft"],
+  "license": "MIT",
+  "commands": ["../commands/poml-assist/create-poml.md"],
+  "agents": ["../agents/poml-architect.md", "../agents/poml-reviewer.md"],
+  "hooks": "../hooks/hooks.json"
+}
