@@ -39,6 +39,11 @@ ignore = [
 "plugins/wasm-optimizer/hooks/scripts/detect-heavy-patterns.py" = ["E501"]
 "plugins/scaffdog-colocation/hooks/scripts/validate-colocation.py" = ["E501"]
 "plugins/rust/hooks/scripts/prompt-check.py" = ["E501"]
+# S603/S607: poml は信頼された固定コマンドから実行、file_path は拡張子・サイズ・パス検証済み
+# E501: 日本語コメント・メッセージは行長制限を超える場合がある（意図的）
+# RUF001: 日本語文字列内の全角括弧は意図的
+"plugins/poml-assist/hooks/scripts/validate-poml.py" = ["S603", "S607", "E501", "RUF001"]
+"plugins/poml-assist/hooks/scripts/render-poml.py" = ["S603", "S607", "E501", "RUF001"]
 
 [tool.ruff.format]
 quote-style = "double"
