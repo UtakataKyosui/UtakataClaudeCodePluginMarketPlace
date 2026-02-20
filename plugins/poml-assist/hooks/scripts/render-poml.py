@@ -42,19 +42,31 @@ def is_poml_file(file_path):
 
 def check_file_safety(file_path):
     """ファイルのサイズとパスを検証する"""
-    # パストラバーサル対策
-    if ".." in file_path:
-        return False
+    # 1. 入力パスを正規化し、明示的な親ディレクトリ参照を拒否する
+    normalized = os.path.normpath(file_path)
+    if ".." in normalized.split(os.sep):
+        return False, "パストラバーサルが検出されました"
 
+    # 2. 実際のパスを解決し、プロジェクトルート配下か確認する
     real_path = os.path.realpath(file_path)
+    project_root = os.path.realpath(os.getcwd())
+    try:
+        common_prefix = os.path.commonpath([project_root, real_path])
+    except ValueError:
+        return False, "パストラバーサルが検出されました"
+    if common_prefix != project_root:
+        return False, "プロジェクト外のパスが検出されました"
 
     # ファイル存在チェック
     if not os.path.isfile(real_path):
-        return False
+        return False, f"ファイルが存在しません: {file_path}"
 
     # ファイルサイズチェック
     file_size = os.path.getsize(real_path)
-    return file_size <= MAX_FILE_SIZE
+    if file_size > MAX_FILE_SIZE:
+        return False, f"ファイルサイズが上限（512KB）を超えています: {file_size} bytes"
+
+    return True, None
 
 
 def check_poml_cli():
@@ -99,7 +111,7 @@ def format_preview(rendered_text, file_name):
     return (
         f"[POML render] {file_name} のプレビュー（先頭 {PREVIEW_MAX_CHARS} 文字）:\n"
         f"{preview}\n...\n"
-        f"  全文確認: poml render {file_name}"
+        f"  全文確認: poml render '{file_name}'"
     )
 
 
@@ -115,7 +127,9 @@ def main():
         sys.exit(0)
 
     # ファイル安全性チェック
-    if not check_file_safety(file_path):
+    is_safe, error_msg = check_file_safety(file_path)
+    if not is_safe:
+        print(f"[POML render] スキップ: {error_msg}", file=sys.stderr)
         sys.exit(0)
 
     # poml CLI の存在確認（未インストール時はスキップのみ、案内は validate-poml.py が担当）

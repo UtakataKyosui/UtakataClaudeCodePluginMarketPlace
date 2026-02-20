@@ -41,10 +41,20 @@ def is_poml_file(file_path):
 
 def check_file_safety(file_path):
     """ファイルのサイズとパスを検証する"""
-    # パストラバーサル対策
-    real_path = os.path.realpath(file_path)
-    if ".." in file_path:
+    # 1. 入力パスを正規化し、明示的な親ディレクトリ参照を拒否する
+    normalized = os.path.normpath(file_path)
+    if ".." in normalized.split(os.sep):
         return False, "パストラバーサルが検出されました"
+
+    # 2. 実際のパスを解決し、プロジェクトルート配下か確認する
+    real_path = os.path.realpath(file_path)
+    project_root = os.path.realpath(os.getcwd())
+    try:
+        common_prefix = os.path.commonpath([project_root, real_path])
+    except ValueError:
+        return False, "パストラバーサルが検出されました"
+    if common_prefix != project_root:
+        return False, "プロジェクト外のパスが検出されました"
 
     # ファイル存在チェック
     if not os.path.isfile(real_path):

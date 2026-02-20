@@ -1,7 +1,7 @@
 ---
 description: ユーザーへの質問を通じてPOMLプロンプトを対話的に設計・生成する
 argument-hint: "[出力ファイルパス（省略可）]"
-allowed-tools: Read, Write, Bash
+allowed-tools: Read, Write
 ---
 
 # poml-assist: create-poml
