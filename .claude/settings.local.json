@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(source:*)"
+      "Bash(source:*)",
+      "Bash(GIT_DIR=\"/home/utakata/ドキュメント/UtakataClaudeCodePluginMarketPlace/.jj/repo/store/git\" gh pr:*)"
     ]
   }
 }
