@@ -49,6 +49,8 @@ ignore = [
 # S101: テストファイルの assert は pytest の標準パターン
 # S108: テストでの /tmp 使用は安全
 "plugins/dev-cost-tracker/hooks/scripts/test_stop_reminder.py" = ["S101", "S108"]
+# E501: 日本語エラーメッセージは行長制限を超える場合がある（意図的）
+"plugins/zenn-review/hooks/scripts/validate-zenn-frontmatter.py" = ["E501"]
 
 [tool.ruff.format]
 quote-style = "double"
