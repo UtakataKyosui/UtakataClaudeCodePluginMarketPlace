@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# ruff: noqa: E501
 """
 PostToolUse hook: Zenn フロントマター / config.yaml バリデーション(Advisory のみ)
 
@@ -88,11 +87,7 @@ def check_file_safety(file_path):
     """ファイルのサイズとパスを検証する"""
     real_path = os.path.realpath(file_path)
     project_root = os.path.realpath(os.getcwd())
-    try:
-        common_root = os.path.commonpath([real_path, project_root])
-    except ValueError:
-        return False, "プロジェクト外のパスが検出されました"
-    if common_root != project_root:
+    if not (real_path.startswith(project_root + os.sep) or real_path == project_root):
         return False, "プロジェクト外のパスが検出されました"
 
     if not os.path.isfile(real_path):
@@ -134,19 +129,7 @@ def parse_frontmatter(content):
         if kv_match:
             key = kv_match.group(1)
             value = kv_match.group(2).strip()
-            if " #" in value and not (
-                (
-                    value.startswith('"')
-                    and value.endswith('"')
-                    and value.count('"') <= 2
-                )
-                or (
-                    value.startswith("'")
-                    and value.endswith("'")
-                    and value.count("'") <= 2
-                )
-            ):
-                value = value.split(" #", 1)[0].strip()
+            value = _strip_inline_comment(value)
             # 配列の簡易パース
             if value.startswith("[") and value.endswith("]"):
                 inner = value[1:-1].strip()
@@ -187,19 +170,7 @@ def parse_yaml_simple(content):
         if kv_match:
             key = kv_match.group(1)
             value = kv_match.group(2).strip()
-            if " #" in value and not (
-                (
-                    value.startswith('"')
-                    and value.endswith('"')
-                    and value.count('"') <= 2
-                )
-                or (
-                    value.startswith("'")
-                    and value.endswith("'")
-                    and value.count("'") <= 2
-                )
-            ):
-                value = value.split(" #", 1)[0].strip()
+            value = _strip_inline_comment(value)
             if not value:
                 # 次の行がリスト項目かもしれない
                 current_list_key = key
